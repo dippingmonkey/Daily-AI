@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纽约吃喝玩乐 · The NYC List</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:      #090909;
+      --bg2:     #0F0F0F;
+      --bg3:     #141414;
+      --card:    #111111;
+      --card-h:  #191919;
+      --border:  rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.11);
+
+      --text:    #F0EBE0;
+      --text-mid:#9A9080;
+      --text-dim:#4A4540;
+
+      --gold:    #F5C518;
+      --gold-d:  #C9900A;
+      --pink:    #FF2D78;
+      --cyan:    #00D4FF;
+
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans:  'DM Sans', system-ui, sans-serif;
+      --mono:  'Space Mono', monospace;
+      --ease:  cubic-bezier(.25,.46,.45,.94);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ────────────────── HERO ────────────────── */
+    .hero {
+      min-height: 100vh;
+      background: var(--bg);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 96px 72px 80px;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    /* city grid texture */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 54px 54px;
+      pointer-events: none;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,197,24,.09) 0%, transparent 65%);
+      top: -120px; right: -80px;
+      animation: hglow 9s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,212,255,.04) 0%, transparent 70%);
+      bottom: -60px; left: 60px;
+      animation: hglow 12s ease-in-out infinite reverse;
+      pointer-events: none;
+    }
+    @keyframes hglow {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.2) translate(-10px, 20px); }
+    }
+
+    .hero-left {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; gap: 28px;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 4px;
+      color: var(--gold); text-transform: uppercase;
+      opacity: 0; animation: fup .7s var(--ease) forwards .2s;
+    }
+    .hero-tag::before {
+      content: ''; display: block; width: 28px; height: 1px; background: var(--gold-d);
+    }
+    .hero-title {
+      font-family: var(--serif); font-weight: 600;
+      font-size: clamp(72px, 9vw, 118px); line-height: .88; letter-spacing: -2px;
+      color: var(--text);
+      opacity: 0; animation: fup .85s var(--ease) forwards .4s;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); display: block; }
+    .hero-desc {
+      font-size: 15px; font-weight: 300; line-height: 1.75;
+      color: var(--text-mid); max-width: 320px;
+      opacity: 0; animation: fup .7s var(--ease) forwards .6s;
+    }
+    .hero-stats {
+      display: flex; gap: 40px; padding-top: 4px;
+      opacity: 0; animation: fup .7s var(--ease) forwards .76s;
+    }
+    .hs-n {
+      font-family: var(--serif); font-size: 44px; font-weight: 700;
+      color: var(--gold); line-height: 1;
+    }
+    .hs-l {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 2.5px;
+      color: var(--text-dim); text-transform: uppercase; margin-top: 5px;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 28px;
+      border: 1px solid rgba(245,197,24,.35); color: var(--gold);
+      text-decoration: none; font-family: var(--mono);
+      font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+      align-self: flex-start;
+      transition: background .22s, border-color .22s;
+      opacity: 0; animation: fup .7s var(--ease) forwards .92s;
+    }
+    .hero-cta:hover { background: rgba(245,197,24,.08); border-color: var(--gold); }
+    .hero-cta-arr { transition: transform .22s var(--ease); }
+    .hero-cta:hover .hero-cta-arr { transform: translateX(5px); }
+
+    .hero-right {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: fdin 1.5s var(--ease) forwards .5s;
+    }
+    .hero-deco {
+      font-family: var(--serif); font-weight: 700; font-style: italic;
+      font-size: clamp(150px, 17vw, 240px); line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(245,197,24,.07);
+      letter-spacing: -5px; user-select: none;
+      position: relative;
+    }
+    .hero-deco-label {
+      position: absolute; bottom: -20px; right: 0;
+      font-family: var(--mono); font-size: 10px; letter-spacing: 4px;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 72px;
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 9px; letter-spacing: 2px;
+      color: var(--text-dim); text-transform: uppercase;
+      opacity: 0; animation: fup .7s var(--ease) forwards 1.1s;
+    }
+    .hero-scroll-line {
+      width: 32px; height: 1px; background: var(--text-dim);
+      transform: scaleX(0); transform-origin: left;
+      animation: grow 1s var(--ease) forwards 1.3s;
+    }
+    @keyframes grow { to { transform: scaleX(1); } }
+    @keyframes fup  { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fdin { from{opacity:0} to{opacity:1} }
+
+    /* ────────────────── TICKER ────────────────── */
+    .ticker {
+      background: var(--gold);
+      color: var(--bg);
+      padding: 9px 0;
+      overflow: hidden; white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-flex;
+      animation: marquee 42s linear infinite;
+      font-family: var(--serif); font-weight: 600; font-size: 15px;
+    }
+    .ti { display: inline-flex; align-items: center; padding: 0 22px; gap: 22px; }
+    .td { width: 3px; height: 3px; border-radius: 50%; background: rgba(9,9,9,.3); flex-shrink: 0; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ────────────────── FEATURED ────────────────── */
+    .featured {
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      padding-top: 52px;
+      overflow: hidden;
+    }
+    .featured-head {
+      max-width: 1440px; margin: 0 auto;
+      padding: 0 56px 28px;
+      display: flex; align-items: baseline; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .featured-title {
+      font-family: var(--serif); font-size: 38px; font-weight: 600;
+      font-style: italic; letter-spacing: -.5px; color: var(--text);
+    }
+    .featured-sub {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 2.5px;
+      color: var(--text-dim); text-transform: uppercase;
+    }
+    .featured-scroll {
+      display: flex; overflow-x: auto;
+      scroll-snap-type: x mandatory; scrollbar-width: none;
+    }
+    .featured-scroll::-webkit-scrollbar { display: none; }
+
+    /* featured card */
+    .fc {
+      flex: 0 0 276px; scroll-snap-align: start;
+      border-right: 1px solid var(--border);
+      padding: 32px 28px 28px;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      background: var(--bg2); position: relative; overflow: hidden;
+      transition: background .2s var(--ease);
+    }
+    .fc:last-child { border-right: none; }
+    .fc::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s var(--ease);
+    }
+    .fc[data-cat="food"]::after { background: var(--gold); }
+    .fc[data-cat="bar"]::after  { background: var(--pink); }
+    .fc[data-cat="gem"]::after  { background: var(--cyan); }
+    .fc:hover { background: var(--bg3); }
+    .fc:hover::after { transform: scaleX(1); }
+    .fc-num {
+      font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
+      color: var(--text-dim); margin-bottom: 22px;
+    }
+    .fc-emoji { font-size: 36px; line-height: 1; margin-bottom: 18px; display: block; }
+    .fc-name {
+      font-family: var(--serif); font-size: 21px; font-weight: 600;
+      line-height: 1.2; letter-spacing: -.2px; margin-bottom: 10px; flex: 1;
+    }
+    .fc-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 22px; }
+    .fc-type { font-family: var(--mono); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; }
+    .fc[data-cat="food"] .fc-type { color: var(--gold-d); }
+    .fc[data-cat="bar"]  .fc-type { color: var(--pink); }
+    .fc[data-cat="gem"]  .fc-type { color: var(--cyan); }
+    .fc-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+    .fc-hood { font-size: 11px; color: var(--text-mid); }
+    .fc-arr {
+      font-size: 15px; color: var(--text-dim); align-self: flex-end;
+      transition: transform .2s var(--ease), color .2s;
+    }
+    .fc:hover .fc-arr { transform: translate(3px,-3px); color: var(--text); }
+
+    /* ────────────────── STICKY NAV ────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(9,9,9,.95);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1440px; margin: 0 auto; padding: 0 56px;
+      display: flex; align-items: center; gap: 20px; height: 56px;
+    }
+    .nav-logo {
+      font-family: var(--serif); font-size: 21px; font-weight: 700;
+      color: var(--text); text-decoration: none; flex-shrink: 0; letter-spacing: -.5px;
+    }
+    .nav-logo em { font-style: italic; color: var(--gold); }
+    .nav-sep { width: 1px; height: 18px; background: var(--border2); flex-shrink: 0; }
+
+    /* Search */
+    .srch { position: relative; flex-shrink: 0; }
+    .srch-ico {
+      position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+      color: var(--text-dim); font-size: 13px; pointer-events: none;
+    }
+    .srch-input {
+      background: rgba(255,255,255,.05); border: 1px solid transparent;
+      border-radius: 100px; padding: 7px 14px 7px 30px;
+      font-family: var(--sans); font-size: 13px; color: var(--text);
+      width: 185px; outline: none; transition: all .22s;
+    }
+    .srch-input:focus { background: var(--bg3); border-color: var(--border2); width: 220px; }
+    .srch-input::placeholder { color: var(--text-dim); }
+
+    /* Pills */
+    .pills { display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none; flex: 1; }
+    .pills::-webkit-scrollbar { display: none; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 14px; border-radius: 100px;
+      border: 1px solid var(--border); background: transparent;
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      color: var(--text-mid); cursor: pointer; white-space: nowrap;
+      transition: all .17s var(--ease);
+    }
+    .pill:hover { border-color: var(--border2); color: var(--text); }
+    .pill.active       { background: var(--text);  border-color: var(--text);  color: var(--bg); }
+    .pill.active-food  { background: var(--gold);  border-color: var(--gold);  color: var(--bg); }
+    .pill.active-bar   { background: var(--pink);  border-color: var(--pink);  color: #fff; }
+    .pill.active-gem   { background: var(--cyan);  border-color: var(--cyan);  color: var(--bg); }
+    .pill-count {
+      font-family: var(--mono); font-size: 9px;
+      opacity: .55; padding: 1px 5px; border-radius: 100px;
+      background: rgba(255,255,255,.1);
+    }
+    .pill.active .pill-count,
+    .pill.active-food .pill-count,
+    .pill.active-bar .pill-count,
+    .pill.active-gem .pill-count { background: rgba(0,0,0,.15); }
+
+    /* Sub-nav */
+    .sub-nav {
+      border-top: 1px solid var(--border);
+      background: rgba(9,9,9,.97);
+      overflow: hidden; max-height: 54px;
+      transition: max-height .3s var(--ease), opacity .25s;
+    }
+    .sub-nav.hidden { max-height: 0 !important; opacity: 0; pointer-events: none; border-top: none; }
+    .sub-inner {
+      max-width: 1440px; margin: 0 auto; padding: 10px 56px;
+      display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+    }
+    .sub-inner::-webkit-scrollbar { display: none; }
+    .sp {
+      padding: 4px 12px; border-radius: 100px;
+      border: 1px solid var(--border); background: transparent;
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text-dim); cursor: pointer; white-space: nowrap;
+      transition: all .15s;
+    }
+    .sp:hover { border-color: var(--gold-d); color: var(--gold); }
+    .sp.active { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+
+    /* ────────────────── MAIN ────────────────── */
+    .main { max-width: 1440px; margin: 0 auto; padding: 52px 56px 100px; }
+
+    .sec-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--border); gap: 12px;
+    }
+    .sec-eyebrow {
+      font-family: var(--mono); font-size: 9px; letter-spacing: 3px;
+      color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;
+    }
+    .sec-title {
+      font-family: var(--serif); font-size: 44px; font-weight: 600;
+      font-style: italic; letter-spacing: -.5px; line-height: 1; color: var(--text);
+    }
+    .sec-meta {
+      font-family: var(--mono); font-size: 10px;
+      letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase;
+    }
+
+    /* ────────────────── GRID ────────────────── */
+    .grid-wrap { transition: opacity .2s var(--ease), transform .2s var(--ease); }
+    .grid-wrap.fading { opacity: 0; transform: translateY(8px); pointer-events: none; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    /* ────────────────── CARD ────────────────── */
+    .card {
+      background: var(--card); padding: 28px 24px 22px;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      position: relative; overflow: hidden;
+      transition: background .2s var(--ease);
+      animation: cin .35s var(--ease) both;
+    }
+    /* top accent bar */
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .28s var(--ease);
+    }
+    .card[data-cat="food"]::before { background: var(--gold); }
+    .card[data-cat="bar"]::before  { background: var(--pink); }
+    .card[data-cat="gem"]::before  { background: var(--cyan); }
+    .card:hover { background: var(--card-h); }
+    .card:hover::before { transform: scaleX(1); }
+    /* glow on hover */
+    .card[data-cat="food"]:hover { box-shadow: 0 0 0 1px rgba(245,197,24,.1) inset; }
+    .card[data-cat="bar"]:hover  { box-shadow: 0 0 0 1px rgba(255,45,120,.1) inset; }
+    .card[data-cat="gem"]:hover  { box-shadow: 0 0 0 1px rgba(0,212,255,.1) inset; }
+
+    .c-emoji { font-size: 34px; line-height: 1; display: block; margin-bottom: 18px; }
+    .c-name {
+      font-family: var(--serif); font-size: 19px; font-weight: 600;
+      line-height: 1.25; letter-spacing: -.2px; color: var(--text); margin-bottom: 8px;
+    }
+    .c-meta { display: flex; align-items: center; gap: 7px; margin-bottom: auto; padding-bottom: 18px; flex-wrap: wrap; }
+    .c-type { font-family: var(--mono); font-size: 8.5px; letter-spacing: 2px; text-transform: uppercase; }
+    .card[data-cat="food"] .c-type { color: var(--gold-d); }
+    .card[data-cat="bar"]  .c-type { color: var(--pink); }
+    .card[data-cat="gem"]  .c-type { color: var(--cyan); }
+    .c-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-dim); flex-shrink: 0; }
+    .c-hood { font-size: 11px; color: var(--text-mid); }
+    .c-foot {
+      padding-top: 16px; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .c-maps {
+      font-family: var(--mono); font-size: 9px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--text-dim); transition: color .2s;
+    }
+    .card:hover .c-maps { color: var(--text-mid); }
+    .c-arr {
+      font-size: 15px; color: var(--text-dim);
+      transition: transform .2s var(--ease), color .2s;
+    }
+    .card:hover .c-arr { transform: translate(3px,-3px); color: var(--text); }
+
+    @keyframes cin { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+    .no-res {
+      grid-column: 1/-1; padding: 80px 0; text-align: center;
+      font-family: var(--serif); font-style: italic; font-size: 24px;
+      color: var(--text-dim); display: none;
+    }
+    .no-res.show { display: block; }
+
+    /* ────────────────── FOOTER ────────────────── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 56px;
+      max-width: 1440px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .f-brand { font-family: var(--serif); font-size: 20px; font-weight: 700; font-style: italic; }
+    .f-brand em { color: var(--gold); }
+    .f-note { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; }
+    .f-top { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: var(--text-dim); text-decoration: none; text-transform: uppercase; transition: color .2s; }
+    .f-top:hover { color: var(--gold); }
+
+    /* ────────────────── RESPONSIVE ────────────────── */
+    @media (max-width: 960px) {
+      .hero { grid-template-columns: 1fr; padding: 72px 36px 60px; }
+      .hero-right { display: none; }
+      .hero-scroll { left: 36px; }
+      .featured-head, .nav-inner, .sub-inner, .main, .footer { padding-left: 28px; padding-right: 28px; }
+    }
+    @media (max-width: 600px) {
+      .srch { display: none; }
+      .hero { padding: 60px 24px 52px; }
+      .hero-scroll { display: none; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .featured-head, .nav-inner, .sub-inner, .main, .footer { padding-left: 16px; padding-right: 16px; }
+      .footer { flex-direction: column; text-align: center; gap: 10px; }
+    }
+    @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero" id="top">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-left">
+    <span class="hero-tag">The Insider's Guide · 2025</span>
+    <h1 class="hero-title">New<br><em>York</em><br>City</h1>
+    <p class="hero-desc">精选纽约吃喝玩乐清单 — 餐厅、酒吧、隐藏宝石，全都在这里。</p>
+    <div class="hero-stats">
+      <div><div class="hs-n">63</div><div class="hs-l">Restaurants</div></div>
+      <div><div class="hs-n">8</div><div class="hs-l">Bars</div></div>
+      <div><div class="hs-n">8</div><div class="hs-l">Hidden Gems</div></div>
+    </div>
+    <a href="#explore" class="hero-cta">开始探索 <span class="hero-cta-arr">→</span></a>
+  </div>
+  <div class="hero-right">
+    <div style="position:relative;">
+      <div class="hero-deco">纽约</div>
+      <div class="hero-deco-label">New York · New York</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>Scroll
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ti">Manhattan<span class="td"></span></span>
+    <span class="ti">Brooklyn<span class="td"></span></span>
+    <span class="ti">West Village<span class="td"></span></span>
+    <span class="ti">SoHo<span class="td"></span></span>
+    <span class="ti">Lower East Side<span class="td"></span></span>
+    <span class="ti">Chinatown<span class="td"></span></span>
+    <span class="ti">Williamsburg<span class="td"></span></span>
+    <span class="ti">Astoria<span class="td"></span></span>
+    <span class="ti">Flushing<span class="td"></span></span>
+    <span class="ti">Harlem<span class="td"></span></span>
+    <span class="ti">Tribeca<span class="td"></span></span>
+    <span class="ti">Koreatown<span class="td"></span></span>
+    <span class="ti">Elmhurst<span class="td"></span></span>
+    <span class="ti">Greenpoint<span class="td"></span></span>
+    <!-- duplicate -->
+    <span class="ti">Manhattan<span class="td"></span></span>
+    <span class="ti">Brooklyn<span class="td"></span></span>
+    <span class="ti">West Village<span class="td"></span></span>
+    <span class="ti">SoHo<span class="td"></span></span>
+    <span class="ti">Lower East Side<span class="td"></span></span>
+    <span class="ti">Chinatown<span class="td"></span></span>
+    <span class="ti">Williamsburg<span class="td"></span></span>
+    <span class="ti">Astoria<span class="td"></span></span>
+    <span class="ti">Flushing<span class="td"></span></span>
+    <span class="ti">Harlem<span class="td"></span></span>
+    <span class="ti">Tribeca<span class="td"></span></span>
+    <span class="ti">Koreatown<span class="td"></span></span>
+    <span class="ti">Elmhurst<span class="td"></span></span>
+    <span class="ti">Greenpoint<span class="td"></span></span>
+  </div>
+</div>
+
+<!-- ── EDITOR'S PICKS ── -->
+<section class="featured">
+  <div class="featured-head">
+    <h2 class="featured-title">Editor's Picks</h2>
+    <span class="featured-sub">手工精选 · 不可错过</span>
+  </div>
+  <div class="featured-scroll" id="featuredScroll"></div>
+</section>
+
+<!-- ── STICKY NAV ── -->
+<nav class="nav" id="explore">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">NYC<em>.</em></a>
+    <div class="nav-sep"></div>
+    <div class="srch">
+      <span class="srch-ico">⌕</span>
+      <input class="srch-input" type="text" id="searchInput" placeholder="搜索…" autocomplete="off">
+    </div>
+    <div class="pills" id="catPills">
+      <button class="pill active" data-filter="all">全部 <span class="pill-count">79</span></button>
+      <button class="pill" data-filter="food">🍴 美食 <span class="pill-count">63</span></button>
+      <button class="pill" data-filter="bar">🍸 酒吧 <span class="pill-count">8</span></button>
+      <button class="pill" data-filter="gem">💎 隐藏宝石 <span class="pill-count">8</span></button>
+    </div>
+  </div>
+</nav>
+<div class="sub-nav" id="subNav">
+  <div class="sub-inner">
+    <button class="sp active" data-cuisine="all">全部</button>
+    <button class="sp" data-cuisine="japanese">🇯🇵 日本</button>
+    <button class="sp" data-cuisine="chinese">🇨🇳 中餐</button>
+    <button class="sp" data-cuisine="thai">🇹🇭 泰国</button>
+    <button class="sp" data-cuisine="korean">🇰🇷 韩国</button>
+    <button class="sp" data-cuisine="italian">🇮🇹 意大利</button>
+    <button class="sp" data-cuisine="french">🇫🇷 法国</button>
+    <button class="sp" data-cuisine="american">🇺🇸 美国</button>
+    <button class="sp" data-cuisine="modern">✦ 现代</button>
+    <button class="sp" data-cuisine="dessert">🍰 甜品</button>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <div class="sec-head">
+    <div>
+      <div class="sec-eyebrow" id="secEyebrow">纽约吃喝玩乐</div>
+      <h2 class="sec-title" id="secTitle">All Spots</h2>
+    </div>
+    <span class="sec-meta" id="secMeta"></span>
+  </div>
+  <div class="grid-wrap" id="gridWrap">
+    <div class="grid" id="grid">
+      <div class="no-res" id="noRes">没有找到匹配的地点</div>
+    </div>
+  </div>
+</main>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer">
+    <div class="f-brand">NYC<em>.</em></div>
+    <div class="f-note">纽约吃喝玩乐 · 手工精选 · 2025</div>
+    <a href="#top" class="f-top">↑ 返回顶部</a>
+  </div>
+</footer>
+
+<script>
+const PLACES = [
+  // BARS
+  { n:"Double Chicken Please",    t:"COCKTAIL BAR",     e:"🍸", cat:"bar",  cui:null,       hood:"Lower East Side",    url:"https://www.google.com/maps/place/Double+Chicken+Please/data=!4m2!3m1!1s0x89c2594f17616e23:0xfe458d735da2699e" },
+  { n:"Mezzrow",                  t:"JAZZ BAR",          e:"🎷", cat:"bar",  cui:null,       hood:"West Village",       url:"https://www.google.com/maps/place/Mezzrow/data=!4m2!3m1!1s0x89c259943f298ccd:0x16481e6b05d4fc93" },
+  { n:"Sogno Toscano Wine Bar",   t:"WINE BAR",          e:"🍷", cat:"bar",  cui:null,       hood:"Upper East Side",    url:"https://www.google.com/maps/place/Sogno+Toscano+Market+%26+Wine+Bar/data=!4m2!3m1!1s0x89c259e05a019cab:0x3b27df11f66584d0" },
+  { n:"The Box",                  t:"NIGHTLIFE",         e:"🎭", cat:"bar",  cui:null,       hood:"Lower East Side",    url:"https://www.google.com/maps/place/The+Box/data=!4m2!3m1!1s0x89c25985d616067d:0xa44ed683c9ffbf7d" },
+  { n:"Dante NYC",                t:"COCKTAIL BAR",      e:"🍹", cat:"bar",  cui:null,       hood:"West Village",       url:"https://www.google.com/maps/place/Dante+NYC/data=!4m2!3m1!1s0x89c2599211bc0e53:0x3c39f8f40f515e27" },
+  { n:"PUBLIC Hotel",             t:"ROOFTOP BAR",       e:"🌆", cat:"bar",  cui:null,       hood:"NoLIta",             url:"https://www.google.com/maps/place/PUBLIC+Hotel/data=!4m2!3m1!1s0x89c25984338e8f61:0x9c45c71d0bc40ebc" },
+  { n:"Farra",                    t:"COCKTAIL BAR",      e:"🥂", cat:"bar",  cui:null,       hood:"Brooklyn",           url:"https://www.google.com/maps/place/Farra/data=!4m2!3m1!1s0x89c25bb8f2730e63:0xe27eb5ad25e253be" },
+  { n:"Patent Pending",           t:"COCKTAIL BAR",      e:"🔬", cat:"bar",  cui:null,       hood:"Midtown",            url:"https://www.google.com/maps/place/Patent+Pending/data=!4m2!3m1!1s0x89c259a5ec84b6a3:0xb014f4ed14104d39" },
+
+  // GEMS
+  { n:"Berry Home",               t:"CHINESE",           e:"🥘", cat:"gem",  cui:null,       hood:"East Village",       url:"https://www.google.com/maps/place/Berry+Home/data=!4m2!3m1!1s0x89c2590b3d3e13b1:0x2ecfdbc685a0b52e" },
+  { n:"Adda Indian Canteen",      t:"INDIAN",            e:"🍛", cat:"gem",  cui:null,       hood:"Long Island City",   url:"https://www.google.com/maps/place/Adda+Indian+Canteen/data=!4m2!3m1!1s0x89c25ff7a5e3c723:0x2bb730fbe0c20890" },
+  { n:"Arlo Midtown",             t:"HOTEL BAR",         e:"🏙️", cat:"gem",  cui:null,       hood:"Midtown",            url:"https://www.google.com/maps/place/Arlo+Midtown/data=!4m2!3m1!1s0x89c25923b857d93d:0x69f17919a8e24822" },
+  { n:"AKA Sutton Place",         t:"BOUTIQUE HOTEL",    e:"🏛️", cat:"gem",  cui:null,       hood:"Midtown East",       url:"https://www.google.com/maps/place/AKA+Sutton+Place/data=!4m2!3m1!1s0x89c258e4d9211357:0x431337b8e291d75e" },
+  { n:"1 Hotel Central Park",     t:"ECO ROOFTOP",       e:"🌿", cat:"gem",  cui:null,       hood:"Central Park",       url:"https://www.google.com/maps/place/1+Hotel+Central+Park/data=!4m2!3m1!1s0x89c258f0adf6be1d:0xbb94d36151e01a46" },
+  { n:"Paper Coffee",             t:"SPECIALTY CAFE",    e:"☕", cat:"gem",  cui:null,       hood:"West Village",       url:"https://www.google.com/maps/place/Paper+Coffee/data=!4m2!3m1!1s0x89c259af577b9503:0xecbb2f86d7f28f34" },
+  { n:"Altair Restaurant NYC",    t:"FINE DINING",       e:"✨", cat:"gem",  cui:null,       hood:"West Village",       url:"https://www.google.com/maps/place/Altair+Restaurant+NYC/data=!4m2!3m1!1s0x89c2591598891521:0x4ebcde18610e64" },
+  { n:"Foxface Natural",          t:"NATURAL WINE BAR",  e:"🦊", cat:"gem",  cui:null,       hood:"Lower East Side",    url:"https://www.google.com/maps/place/Foxface+Natural/data=!4m2!3m1!1s0x89c259b87166d1fb:0x427df57d29ff69ff" },
+
+  // JAPANESE
+  { n:"Sushi Yasaka",             t:"SUSHI",             e:"🍣", cat:"food", cui:"japanese", hood:"Upper West Side",    url:"https://www.google.com/maps/place/Sushi+Yasaka/data=!4m2!3m1!1s0x89c25861f92c2143:0x6df52b9e7310c3c5" },
+  { n:"Torien",                   t:"YAKITORI",          e:"🔥", cat:"food", cui:"japanese", hood:"Tribeca",            url:"https://www.google.com/maps/place/Torien/data=!4m2!3m1!1s0x89c25919b67c47d3:0x91cb196c9f5841a2" },
+  { n:"Nakaji",                   t:"KAISEKI",           e:"🎌", cat:"food", cui:"japanese", hood:"Lower East Side",    url:"https://www.google.com/maps/place/Nakaji/data=!4m2!3m1!1s0x89c25b55072b6d5f:0xedf61d594bad6933" },
+  { n:"Okiboru House of Udon",    t:"UDON",              e:"🍜", cat:"food", cui:"japanese", hood:"East Village",       url:"https://www.google.com/maps/place/Okiboru+House+of+Udon/data=!4m2!3m1!1s0x89c259005266011f:0xb0f1eba80963810b" },
+  { n:"Secchu Yokota 折衷よこ田", t:"JAPANESE",          e:"🌸", cat:"food", cui:"japanese", hood:"East Village",       url:"https://www.google.com/maps/place/Secchu+Yokota+%E6%8A%98%E8%A1%B7%E3%82%88%E3%81%93%E7%94%B0/data=!4m2!3m1!1s0x89c259827f0ae6f3:0x129e0672bd444ff0" },
+  { n:"Hiyake Yakiniku BBQ",      t:"YAKINIKU",          e:"🥩", cat:"food", cui:"japanese", hood:"East Village",       url:"https://www.google.com/maps/place/Hiyake+Yakiniku+BBQ/data=!4m2!3m1!1s0x89c259b49a74874b:0xb166f5327522e74" },
+  { n:"Nami Nori",                t:"TEMAKI",            e:"🌊", cat:"food", cui:"japanese", hood:"West Village",       url:"https://www.google.com/maps/place/Nami+Nori/data=!4m2!3m1!1s0x89c25953a8f2f671:0xcde10862f74f8052" },
+  { n:"Ivan Ramen",               t:"RAMEN",             e:"🍥", cat:"food", cui:"japanese", hood:"Lower East Side",    url:"https://www.google.com/maps/place/Ivan+Ramen/data=!4m2!3m1!1s0x89c259818b17e1ad:0x397d7608ef2c28ff" },
+  { n:"Yakitori Torishin",        t:"YAKITORI",          e:"🐔", cat:"food", cui:"japanese", hood:"Midtown East",       url:"https://www.google.com/maps/place/Yakitori+Torishin/data=!4m2!3m1!1s0x89c2585766254b95:0x8af4fe4355a47e72" },
+  { n:"Kono",                     t:"OMAKASE",           e:"👑", cat:"food", cui:"japanese", hood:"Williamsburg",       url:"https://www.google.com/maps/place/Kono/data=!4m2!3m1!1s0x89c25bff22b39ae3:0xb462470cb9c0dbb5" },
+
+  // CHINESE
+  { n:"Pecking House Chinatown",  t:"PEKING DUCK",       e:"🦆", cat:"food", cui:"chinese",  hood:"Chinatown",          url:"https://www.google.com/maps/place/Pecking+House+Chinatown/data=!4m2!3m1!1s0x89c25b40ee334789:0xd9aadcf259c07a26" },
+  { n:"Shanghai Time",            t:"SHANGHAINESE",      e:"🏮", cat:"food", cui:"chinese",  hood:"Flushing",           url:"https://www.google.com/maps/place/Shanghai+Time/data=!4m2!3m1!1s0x89c259cbadf3f55d:0x6d0ddd7f2e7f31b6" },
+  { n:"四川饭店",                 t:"SICHUAN",           e:"🌶️", cat:"food", cui:"chinese",  hood:"Flushing",           url:"https://www.google.com/maps/place/%E5%9B%9B%E5%B7%9D%E9%A5%AD%E5%BA%97/data=!4m2!3m1!1s0x89c2610059a81ccb:0xd6fe063648fb4a36" },
+  { n:"Hot Kitchen Sichuan",      t:"SICHUAN",           e:"🔥", cat:"food", cui:"chinese",  hood:"East Village",       url:"https://www.google.com/maps/place/Hot+Kitchen+Sichuan+Style/data=!4m2!3m1!1s0x89c2600e7c0a167b:0xc19543e308d4c4c4" },
+  { n:"Yun Nan Flavour Garden",   t:"YUNNAN",            e:"🌿", cat:"food", cui:"chinese",  hood:"Sunset Park",        url:"https://www.google.com/maps/place/Yun+Nan+Flavour+Garden/data=!4m2!3m1!1s0x89c25acac5f78c8b:0x63637a2e20605189" },
+  { n:"Xi Top BBQ",               t:"XINJIANG BBQ",      e:"🍢", cat:"food", cui:"chinese",  hood:"Flushing",           url:"https://www.google.com/maps/place/Xi+Top+BBQ/data=!4m2!3m1!1s0x89c2617339830763:0xa99608f683410fb6" },
+  { n:"Spicy Village",            t:"HENAN",             e:"🌶️", cat:"food", cui:"chinese",  hood:"Chinatown",          url:"https://www.google.com/maps/place/Spicy+Village/data=!4m2!3m1!1s0x89c25a281fc4cab7:0xefe26f1bb5922e6" },
+  { n:"37 Xiang Hot Pot",         t:"HOTPOT",            e:"♨️", cat:"food", cui:"chinese",  hood:"Flushing",           url:"https://www.google.com/maps/place/37+Xiang+Seafood+Hot+Pot+Restaurant/data=!4m2!3m1!1s0x89c2615a261d0e71:0x964a5d161501ad2e" },
+  { n:"Corgi Jianbing 可吉煎饼",  t:"STREET FOOD",       e:"🥙", cat:"food", cui:"chinese",  hood:"East Village",       url:"https://www.google.com/maps/place/Corgi+Jianbing+%E5%8F%AF%E5%90%89%E7%85%8E%E9%A5%BC/data=!4m2!3m1!1s0x89c259a4266de5b3:0xb54456e7e9566df1" },
+  { n:"Yanwu",                    t:"CHINESE",           e:"🏮", cat:"food", cui:"chinese",  hood:"Flushing",           url:"https://www.google.com/maps/place/Yanwu/data=!4m2!3m1!1s0x89c26102cbc56c69:0xe43e97e3b6c459de" },
+
+  // THAI
+  { n:"RYNN Thai Restaurant",     t:"THAI",              e:"🌺", cat:"food", cui:"thai",     hood:"Midtown East",       url:"https://www.google.com/maps/place/RYNN+Thai+Restaurant+%26+Bar/data=!4m2!3m1!1s0x89c259f2e03e32fb:0x890885467b65fce3" },
+  { n:"Ayada",                    t:"THAI",              e:"🌸", cat:"food", cui:"thai",     hood:"Elmhurst",           url:"https://www.google.com/maps/place/Ayada/data=!4m2!3m1!1s0x89c25faa929e13a5:0xff28104863c530c7" },
+  { n:"Bangkok Supper Club",      t:"THAI FUSION",       e:"🌴", cat:"food", cui:"thai",     hood:"East Village",       url:"https://www.google.com/maps/place/Bangkok+Supper+Club/data=!4m2!3m1!1s0x89c259350ea1dbbd:0xa4414d5a0ffb0e7a" },
+  { n:"Zaab Zaab",                t:"ISAAN THAI",        e:"🌶️", cat:"food", cui:"thai",     hood:"Elmhurst",           url:"https://www.google.com/maps/place/Zaab+Zaab/data=!4m2!3m1!1s0x89c25fd357381f49:0xd9cf7915ede1feaa" },
+  { n:"Lan Larb Chiang Mai",      t:"NORTHERN THAI",     e:"🌿", cat:"food", cui:"thai",     hood:"East Village",       url:"https://www.google.com/maps/place/Lan+Larb+Chiang+Mai/data=!4m2!3m1!1s0x89c25989a651d5cd:0xc4c611d5e5cc4c0f" },
+  { n:"Pye Boat Noodle",          t:"THAI NOODLES",      e:"🍜", cat:"food", cui:"thai",     hood:"Woodside",           url:"https://www.google.com/maps/place/Pye+Boat+Noodle/data=!4m2!3m1!1s0x89c25fc888ed8b4d:0x7b11133c98a37883" },
+  { n:"Eim Khao Mun Kai",         t:"THAI",              e:"🍗", cat:"food", cui:"thai",     hood:"Woodside",           url:"https://www.google.com/maps/place/Eim+Khao+Mun+Kai/data=!4m2!3m1!1s0x89c25fab7dfca20b:0x5336d44f9daac4d2" },
+  { n:"Chalong NYC",              t:"THAI",              e:"🥥", cat:"food", cui:"thai",     hood:"West Village",       url:"https://www.google.com/maps/place/Chalong+NYC/data=!4m2!3m1!1s0x89c2591e368c0087:0x99124cb91291893a" },
+
+  // KOREAN
+  { n:"Yoon Haeundae Galbi",      t:"KOREAN BBQ",        e:"🥩", cat:"food", cui:"korean",   hood:"Koreatown",          url:"https://www.google.com/maps/place/Yoon+Haeundae+Galbi/data=!4m2!3m1!1s0x89c259a98d370d3f:0xbad51cf0d0ecca9a" },
+  { n:"Samwoojung",               t:"KOREAN",            e:"🍲", cat:"food", cui:"korean",   hood:"Koreatown",          url:"https://www.google.com/maps/place/Samwoojung/data=!4m2!3m1!1s0x89c2596568c74e1d:0x2d1e837d97066148" },
+  { n:"Jeju Noodle Bar",          t:"KOREAN NOODLE",     e:"🌊", cat:"food", cui:"korean",   hood:"West Village",       url:"https://www.google.com/maps/place/Jeju+Noodle+Bar/data=!4m2!3m1!1s0x89c259ecba3f2cbd:0x7bdf461ece9544c0" },
+  { n:"Kochi",                    t:"KOREAN TASTING",    e:"🍱", cat:"food", cui:"korean",   hood:"Koreatown",          url:"https://www.google.com/maps/place/Kochi/data=!4m2!3m1!1s0x89c259548cb3c437:0x8e83dcd5a865bef9" },
+  { n:"Jongro BBQ",               t:"KOREAN BBQ",        e:"🔥", cat:"food", cui:"korean",   hood:"Koreatown",          url:"https://www.google.com/maps/place/Jongro+BBQ/data=!4m2!3m1!1s0x89c259a8ef657243:0x9185d801317e2d9d" },
+
+  // ITALIAN
+  { n:"Via Carota",               t:"ITALIAN",           e:"🫒", cat:"food", cui:"italian",  hood:"West Village",       url:"https://www.google.com/maps/place/Via+Carota/data=!4m2!3m1!1s0x89c259937f4eb1af:0xe49ad5dc628370bb" },
+  { n:"Crown Shy",                t:"FINE DINING",       e:"👑", cat:"food", cui:"italian",  hood:"Financial District",  url:"https://www.google.com/maps/place/Crown+Shy/data=!4m2!3m1!1s0x89c25a16344bffff:0xd7c97b5c890e7912" },
+  { n:"I Sodi",                   t:"FLORENTINE",        e:"🍷", cat:"food", cui:"italian",  hood:"West Village",       url:"https://www.google.com/maps/place/I+Sodi/data=!4m2!3m1!1s0x89c259936081692b:0x56383ad400283e21" },
+  { n:"Una Pizza Napoletana",     t:"PIZZA",             e:"🍕", cat:"food", cui:"italian",  hood:"East Village",       url:"https://www.google.com/maps/place/Una+Pizza+Napoletana/data=!4m2!3m1!1s0x89c25983f90bb601:0xa85e9b098e3afb21" },
+  { n:"Cucina Alba",              t:"ITALIAN",           e:"🌿", cat:"food", cui:"italian",  hood:"West Village",       url:"https://www.google.com/maps/place/Cucina+Alba/data=!4m2!3m1!1s0x89c259f5ee7a69ab:0xe6453fcc99e2026b" },
+  { n:"Maestro Pasta",            t:"PASTA",             e:"🍝", cat:"food", cui:"italian",  hood:"East Village",       url:"https://www.google.com/maps/place/Maestro+Pasta/data=!4m2!3m1!1s0x89c2592e64ff30af:0xcab4c7475ba08a9f" },
+  { n:"Ferdinando's Focacceria",  t:"SICILIAN",          e:"🥖", cat:"food", cui:"italian",  hood:"Carroll Gardens",    url:"https://www.google.com/maps/place/Ferdinando's+Focacceria/data=!4m2!3m1!1s0x89c25a5c19bf921f:0x6bbdefa167d1b449" },
+  { n:"San Sabino",               t:"ITALIAN",           e:"🦞", cat:"food", cui:"italian",  hood:"West Village",       url:"https://www.google.com/maps/place/San+Sabino/data=!4m2!3m1!1s0x89c25900084655db:0x8e02881790d1aac8" },
+
+  // FRENCH
+  { n:"Le Bernardin",             t:"FRENCH SEAFOOD",    e:"🌊", cat:"food", cui:"french",   hood:"Midtown",            url:"https://www.google.com/maps/place/Le+Bernardin/data=!4m2!3m1!1s0x89c25947ea10b457:0x6548e99cd73a1e6b" },
+  { n:"Balthazar",                t:"FRENCH BRASSERIE",  e:"🥐", cat:"food", cui:"french",   hood:"SoHo",               url:"https://www.google.com/maps/place/Balthazar/data=!4m2!3m1!1s0x89c259892cccb7b7:0xbf8343b3f54c1b09" },
+  { n:"Place des Fêtes",          t:"FRENCH BISTRO",     e:"🥖", cat:"food", cui:"french",   hood:"Clinton Hill",       url:"https://www.google.com/maps/place/Place+des+F%C3%AAtes/data=!4m2!3m1!1s0x89c25b6598f21eb7:0x3d2755c3274136cc" },
+  { n:"Le Rock",                  t:"FRENCH",            e:"🍾", cat:"food", cui:"french",   hood:"Rockefeller Ctr",    url:"https://www.google.com/maps/place/Le+Rock/data=!4m2!3m1!1s0x89c259907fc8b435:0x1e54d9b24e2eb98d" },
+  { n:"Lucien",                   t:"FRENCH BISTRO",     e:"🥂", cat:"food", cui:"french",   hood:"East Village",       url:"https://www.google.com/maps/place/Lucien/data=!4m2!3m1!1s0x89c2598384be7ffd:0x91d470d8e1a271d2" },
+
+  // AMERICAN
+  { n:"4 Charles Prime Rib",      t:"STEAKHOUSE",        e:"🥩", cat:"food", cui:"american", hood:"West Village",       url:"https://www.google.com/maps/place/4+Charles+Prime+Rib/data=!4m2!3m1!1s0x89c259942a0eb0fb:0x157ade6f9c17ad32" },
+  { n:"Gramercy Tavern",          t:"AMERICAN",          e:"🌿", cat:"food", cui:"american", hood:"Gramercy",           url:"https://www.google.com/maps/place/Gramercy+Tavern/data=!4m2!3m1!1s0x89c259a1820824bd:0x2b79dcdc251b8415" },
+  { n:"Manhatta",                 t:"SKYLINE VIEWS",     e:"🗽", cat:"food", cui:"american", hood:"Financial District",  url:"https://www.google.com/maps/place/Manhatta/data=!4m2!3m1!1s0x89c25bc797d635a1:0x60b055910436a0a4" },
+  { n:"abc kitchen",              t:"FARM TO TABLE",     e:"🥦", cat:"food", cui:"american", hood:"Flatiron",           url:"https://www.google.com/maps/place/abc+kitchen/data=!4m2!3m1!1s0x89c259a222887949:0x7fa97785ae431822" },
+  { n:"Amy Ruth's",               t:"SOUL FOOD",         e:"🍗", cat:"food", cui:"american", hood:"Harlem",             url:"https://www.google.com/maps/place/Amy+Ruth's/data=!4m2!3m1!1s0x89c2f611ab995fed:0x5c12a83e012a1c1" },
+  { n:"Monkey Bar",               t:"SUPPER CLUB",       e:"🐒", cat:"food", cui:"american", hood:"Midtown East",       url:"https://www.google.com/maps/place/Monkey+Bar/data=!4m2!3m1!1s0x89c258fb1466d69b:0x58ecf24f96cc68e0" },
+
+  // MODERN
+  { n:"Contra",                   t:"CONTEMPORARY",      e:"🖤", cat:"food", cui:"modern",   hood:"Lower East Side",    url:"https://www.google.com/maps/place/Contra/data=!4m2!3m1!1s0x89c25986cbe8584f:0x94f346fa23b5eb40" },
+  { n:"Aska",                     t:"NORDIC",            e:"❄️", cat:"food", cui:"modern",   hood:"Williamsburg",       url:"https://www.google.com/maps/place/Aska/data=!4m2!3m1!1s0x89c2595d4ead0653:0x19fa5a8162f13550" },
+  { n:"The Modern",               t:"CONTEMPORARY",      e:"🎨", cat:"food", cui:"modern",   hood:"Midtown (MoMA)",     url:"https://www.google.com/maps/place/The+Modern/data=!4m2!3m1!1s0x89c258fbc4a06f31:0xb0f62a18b16739cc" },
+  { n:"nuar",                     t:"CONTEMPORARY",      e:"🌑", cat:"food", cui:"modern",   hood:"East Village",       url:"https://www.google.com/maps/place/nuar/data=!4m2!3m1!1s0x89c259002aa56c37:0x7ad1b3224f056d24" },
+  { n:"Strange Delight",          t:"ECLECTIC",          e:"🎪", cat:"food", cui:"modern",   hood:"Williamsburg",       url:"https://www.google.com/maps/place/Strange+Delight/data=!4m2!3m1!1s0x89c25b006aff9f49:0xc96e5fe09059a316" },
+  { n:"Wildair",                  t:"NATURAL WINE",      e:"🍾", cat:"food", cui:"modern",   hood:"Lower East Side",    url:"https://www.google.com/maps/place/Wildair/data=!4m2!3m1!1s0x89c25a29d0319b7d:0x68b27fd63118d308" },
+
+  // DESSERTS
+  { n:"ANDO patisserie",          t:"PATISSERIE",        e:"🍰", cat:"food", cui:"dessert",  hood:"Chelsea",            url:"https://www.google.com/maps/place/ANDO+patisserie/data=!4m2!3m1!1s0x89c2598cb2e54721:0x678d61a43095938d" },
+  { n:"Lysée",                    t:"KOREAN PASTRY",     e:"🌸", cat:"food", cui:"dessert",  hood:"Chelsea",            url:"https://www.google.com/maps/place/Lys%C3%A9e/data=!4m2!3m1!1s0x89c2596ac07cd8c3:0xb8aa92d60c6bd28a" },
+  { n:"Supermoon Bakehouse",      t:"BAKERY",            e:"🌙", cat:"food", cui:"dessert",  hood:"Lower East Side",    url:"https://www.google.com/maps/place/Supermoon+Bakehouse/data=!4m2!3m1!1s0x89c259816b253671:0xa982ed6d6875ed61" },
+  { n:"Café Kitsuné West Village",t:"CAFE",              e:"🦊", cat:"food", cui:"dessert",  hood:"West Village",       url:"https://www.google.com/maps/place/Caf%C3%A9+Kitsun%C3%A9+West+Village/data=!4m2!3m1!1s0x89c259149db4b86b:0x4882ac459cc3ee4d" },
+  { n:"il laboratorio del gelato",t:"GELATO",            e:"🍦", cat:"food", cui:"dessert",  hood:"Lower East Side",    url:"https://www.google.com/maps/place/il+laboratorio+del+gelato/data=!4m2!3m1!1s0x89c2598722ae28eb:0x5c4a711e46a801a0" },
+];
+
+/* ── EDITOR'S PICKS ── */
+const PICKS = ["Via Carota","Double Chicken Please","Kono","Place des Fêtes","Zaab Zaab","Crown Shy","Foxface Natural","4 Charles Prime Rib"];
+(function() {
+  const fs = document.getElementById('featuredScroll');
+  PICKS.forEach((id, i) => {
+    const p = PLACES.find(x => x.n === id); if (!p) return;
+    const a = document.createElement('a');
+    a.href = p.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+    a.className = 'fc'; a.dataset.cat = p.cat;
+    a.innerHTML = `
+      <div class="fc-num">0${i+1}</div>
+      <span class="fc-emoji">${p.e}</span>
+      <div class="fc-name">${p.n}</div>
+      <div class="fc-meta">
+        <span class="fc-type">${p.t}</span>
+        <span class="fc-dot"></span>
+        <span class="fc-hood">${p.hood}</span>
+      </div>
+      <span class="fc-arr">↗</span>`;
+    fs.appendChild(a);
+  });
+})();
+
+/* ── STATE ── */
+let activeCat = 'all', activeCui = 'all', searchQ = '';
+
+const gridWrap   = document.getElementById('gridWrap');
+const grid       = document.getElementById('grid');
+const noRes      = document.getElementById('noRes');
+const secTitle   = document.getElementById('secTitle');
+const secEyebrow = document.getElementById('secEyebrow');
+const secMeta    = document.getElementById('secMeta');
+const subNav     = document.getElementById('subNav');
+
+const CAT_T  = { all:'All Spots', food:'Eats', bar:'Bars', gem:'Hidden Gems' };
+const CUI_T  = { all:'All Eats', japanese:'Japanese', chinese:'Chinese', thai:'Thai', korean:'Korean', italian:'Italian', french:'French', american:'American', modern:'Modern', dessert:'Desserts & Cafés' };
+const EY_MAP = { all:'纽约吃喝玩乐', food:'美食精选', bar:'酒吧精选', gem:'隐藏宝石' };
+const EY_CUI = { japanese:'日本料理', chinese:'中餐精选', thai:'泰国料理', korean:'韩国料理', italian:'意大利', french:'法国料理', american:'美国料理', modern:'现代料理', dessert:'甜品与咖啡' };
+
+function mkCard(p, delay) {
+  const a = document.createElement('a');
+  a.href = p.url; a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.className = 'card'; a.dataset.cat = p.cat;
+  if (p.cui) a.dataset.cui = p.cui;
+  a.style.animationDelay = delay + 'ms';
+  a.innerHTML = `
+    <span class="c-emoji">${p.e}</span>
+    <div class="c-name">${p.n}</div>
+    <div class="c-meta">
+      <span class="c-type">${p.t}</span>
+      <span class="c-dot"></span>
+      <span class="c-hood">${p.hood}</span>
+    </div>
+    <div class="c-foot">
+      <span class="c-maps">View on Maps</span>
+      <span class="c-arr">↗</span>
+    </div>`;
+  return a;
+}
+
+function render() {
+  const q = searchQ.toLowerCase();
+  const filtered = PLACES.filter(p => {
+    if (activeCat !== 'all' && p.cat !== activeCat) return false;
+    if (activeCui !== 'all' && p.cui !== activeCui) return false;
+    if (q && !p.n.toLowerCase().includes(q) && !p.hood.toLowerCase().includes(q) && !p.t.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  gridWrap.classList.add('fading');
+  setTimeout(() => {
+    Array.from(grid.children).forEach(c => { if (!c.classList.contains('no-res')) c.remove(); });
+    if (filtered.length === 0) { noRes.classList.add('show'); }
+    else {
+      noRes.classList.remove('show');
+      filtered.forEach((p, i) => grid.appendChild(mkCard(p, i * 18)));
+    }
+    const t  = activeCui !== 'all' ? CUI_T[activeCui] : CAT_T[activeCat];
+    const ey = activeCui !== 'all' ? EY_CUI[activeCui] : EY_MAP[activeCat];
+    secTitle.textContent   = t;
+    secEyebrow.textContent = ey;
+    secMeta.textContent    = filtered.length + ' spots';
+    subNav.classList.toggle('hidden', !(activeCat === 'food' || activeCat === 'all'));
+    gridWrap.classList.remove('fading');
+  }, 200);
+}
+
+document.querySelectorAll('.pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pill').forEach(b => b.classList.remove('active','active-food','active-bar','active-gem'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    if (f === 'food') btn.classList.add('active-food');
+    if (f === 'bar')  btn.classList.add('active-bar');
+    if (f === 'gem')  btn.classList.add('active-gem');
+    activeCat = f;
+    if (f === 'bar' || f === 'gem') {
+      activeCui = 'all';
+      document.querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
+      document.querySelector('.sp[data-cuisine="all"]').classList.add('active');
+    }
+    render();
+  });
+});
+
+document.querySelectorAll('.sp').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sp').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCui = btn.dataset.cuisine;
+    if (activeCui !== 'all') {
+      activeCat = 'food';
+      document.querySelectorAll('.pill').forEach(b => b.classList.remove('active','active-food','active-bar','active-gem'));
+      document.querySelector('.pill[data-filter="food"]').classList.add('active','active-food');
+    }
+    render();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQ = e.target.value.trim(); render();
+});
+
+document.querySelector('.f-top').addEventListener('click', e => {
+  e.preventDefault(); window.scrollTo({ top:0, behavior:'smooth' });
+});
+
+render();
+</script>
+</body>
+</html>
