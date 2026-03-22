@@ -466,6 +466,25 @@
       .footer { flex-direction: column; text-align: center; gap: 10px; }
     }
     @media (max-width: 420px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      flex-shrink: 0;
+      margin-left: auto;
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text-mid);
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .2s var(--ease);
+      white-space: nowrap;
+    }
+    .lang-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .lang-toggle.zh    { color: var(--gold); border-color: rgba(245,197,24,.5); }
   </style>
 </head>
 <body>
@@ -475,15 +494,15 @@
   <div class="hero-glow"></div>
   <div class="hero-glow2"></div>
   <div class="hero-left">
-    <span class="hero-tag">The Insider's Guide · 2025</span>
+    <span class="hero-tag" id="heroTag">The Insider's Guide · 2025</span>
     <h1 class="hero-title">New<br><em>York</em><br>City</h1>
-    <p class="hero-desc">精选纽约吃喝玩乐清单 — 餐厅、酒吧、隐藏宝石，全都在这里。</p>
+    <p class="hero-desc" id="heroDesc">The ultimate NYC guide — restaurants, bars & hidden gems, all in one place.</p>
     <div class="hero-stats">
-      <div><div class="hs-n">63</div><div class="hs-l">Restaurants</div></div>
-      <div><div class="hs-n">8</div><div class="hs-l">Bars</div></div>
-      <div><div class="hs-n">8</div><div class="hs-l">Hidden Gems</div></div>
+      <div><div class="hs-n">63</div><div class="hs-l" id="statR">Restaurants</div></div>
+      <div><div class="hs-n">8</div><div class="hs-l" id="statB">Bars</div></div>
+      <div><div class="hs-n">8</div><div class="hs-l" id="statG">Hidden Gems</div></div>
     </div>
-    <a href="#explore" class="hero-cta">开始探索 <span class="hero-cta-arr">→</span></a>
+    <a href="#explore" class="hero-cta"><span id="heroCta">Explore</span> <span class="hero-cta-arr">→</span></a>
   </div>
   <div class="hero-right">
     <div style="position:relative;">
@@ -492,7 +511,7 @@
     </div>
   </div>
   <div class="hero-scroll">
-    <div class="hero-scroll-line"></div>Scroll
+    <div class="hero-scroll-line"></div><span id="heroScroll">Scroll</span>
   </div>
 </section>
 
@@ -534,8 +553,8 @@
 <!-- ── EDITOR'S PICKS ── -->
 <section class="featured">
   <div class="featured-head">
-    <h2 class="featured-title">Editor's Picks</h2>
-    <span class="featured-sub">手工精选 · 不可错过</span>
+    <h2 class="featured-title" id="featTitle">Editor's Picks</h2>
+    <span class="featured-sub" id="featSub">Handpicked · Not to Miss</span>
   </div>
   <div class="featured-scroll" id="featuredScroll"></div>
 </section>
@@ -547,28 +566,29 @@
     <div class="nav-sep"></div>
     <div class="srch">
       <span class="srch-ico">⌕</span>
-      <input class="srch-input" type="text" id="searchInput" placeholder="搜索…" autocomplete="off">
+      <input class="srch-input" type="text" id="searchInput" placeholder="Search…" autocomplete="off">
     </div>
     <div class="pills" id="catPills">
-      <button class="pill active" data-filter="all">全部 <span class="pill-count">79</span></button>
-      <button class="pill" data-filter="food">🍴 美食 <span class="pill-count">63</span></button>
-      <button class="pill" data-filter="bar">🍸 酒吧 <span class="pill-count">8</span></button>
-      <button class="pill" data-filter="gem">💎 隐藏宝石 <span class="pill-count">8</span></button>
+      <button class="pill active" data-filter="all"><span class="pill-label" data-key="pillAll">All</span> <span class="pill-count">79</span></button>
+      <button class="pill" data-filter="food">🍴 <span class="pill-label" data-key="pillFood">Eats</span> <span class="pill-count">63</span></button>
+      <button class="pill" data-filter="bar">🍸 <span class="pill-label" data-key="pillBar">Bars</span> <span class="pill-count">8</span></button>
+      <button class="pill" data-filter="gem">💎 <span class="pill-label" data-key="pillGem">Hidden Gems</span> <span class="pill-count">8</span></button>
     </div>
+    <button class="lang-toggle" id="langToggle">中文</button>
   </div>
 </nav>
 <div class="sub-nav" id="subNav">
   <div class="sub-inner">
-    <button class="sp active" data-cuisine="all">全部</button>
-    <button class="sp" data-cuisine="japanese">🇯🇵 日本</button>
-    <button class="sp" data-cuisine="chinese">🇨🇳 中餐</button>
-    <button class="sp" data-cuisine="thai">🇹🇭 泰国</button>
-    <button class="sp" data-cuisine="korean">🇰🇷 韩国</button>
-    <button class="sp" data-cuisine="italian">🇮🇹 意大利</button>
-    <button class="sp" data-cuisine="french">🇫🇷 法国</button>
-    <button class="sp" data-cuisine="american">🇺🇸 美国</button>
-    <button class="sp" data-cuisine="modern">✦ 现代</button>
-    <button class="sp" data-cuisine="dessert">🍰 甜品</button>
+    <button class="sp active" data-cuisine="all"><span data-key="spAll">All</span></button>
+    <button class="sp" data-cuisine="japanese">🇯🇵 <span data-key="spJapanese">Japanese</span></button>
+    <button class="sp" data-cuisine="chinese">🇨🇳 <span data-key="spChinese">Chinese</span></button>
+    <button class="sp" data-cuisine="thai">🇹🇭 <span data-key="spThai">Thai</span></button>
+    <button class="sp" data-cuisine="korean">🇰🇷 <span data-key="spKorean">Korean</span></button>
+    <button class="sp" data-cuisine="italian">🇮🇹 <span data-key="spItalian">Italian</span></button>
+    <button class="sp" data-cuisine="french">🇫🇷 <span data-key="spFrench">French</span></button>
+    <button class="sp" data-cuisine="american">🇺🇸 <span data-key="spAmerican">American</span></button>
+    <button class="sp" data-cuisine="modern">✦ <span data-key="spModern">Modern</span></button>
+    <button class="sp" data-cuisine="dessert">🍰 <span data-key="spDessert">Desserts</span></button>
   </div>
 </div>
 
@@ -576,14 +596,14 @@
 <main class="main">
   <div class="sec-head">
     <div>
-      <div class="sec-eyebrow" id="secEyebrow">纽约吃喝玩乐</div>
+      <div class="sec-eyebrow" id="secEyebrow">NYC Guide</div>
       <h2 class="sec-title" id="secTitle">All Spots</h2>
     </div>
     <span class="sec-meta" id="secMeta"></span>
   </div>
   <div class="grid-wrap" id="gridWrap">
     <div class="grid" id="grid">
-      <div class="no-res" id="noRes">没有找到匹配的地点</div>
+      <div class="no-res" id="noRes">No results found</div>
     </div>
   </div>
 </main>
@@ -592,8 +612,8 @@
 <footer>
   <div class="footer">
     <div class="f-brand">NYC<em>.</em></div>
-    <div class="f-note">纽约吃喝玩乐 · 手工精选 · 2025</div>
-    <a href="#top" class="f-top">↑ 返回顶部</a>
+    <div class="f-note" id="footNote">NYC Guide · Handpicked · 2025</div>
+    <a href="#top" class="f-top" id="footTop">↑ Back to Top</a>
   </div>
 </footer>
 
@@ -735,10 +755,93 @@ const secEyebrow = document.getElementById('secEyebrow');
 const secMeta    = document.getElementById('secMeta');
 const subNav     = document.getElementById('subNav');
 
-const CAT_T  = { all:'All Spots', food:'Eats', bar:'Bars', gem:'Hidden Gems' };
-const CUI_T  = { all:'All Eats', japanese:'Japanese', chinese:'Chinese', thai:'Thai', korean:'Korean', italian:'Italian', french:'French', american:'American', modern:'Modern', dessert:'Desserts & Cafés' };
-const EY_MAP = { all:'纽约吃喝玩乐', food:'美食精选', bar:'酒吧精选', gem:'隐藏宝石' };
-const EY_CUI = { japanese:'日本料理', chinese:'中餐精选', thai:'泰国料理', korean:'韩国料理', italian:'意大利', french:'法国料理', american:'美国料理', modern:'现代料理', dessert:'甜品与咖啡' };
+/* ── i18n ── */
+const TRANSLATIONS = {
+  en: {
+    heroTag:    "The Insider's Guide · 2025",
+    heroDesc:   "The ultimate NYC guide — restaurants, bars & hidden gems, all in one place.",
+    statR: "Restaurants", statB: "Bars", statG: "Hidden Gems",
+    heroCta: "Explore", heroScroll: "Scroll",
+    featTitle: "Editor's Picks", featSub: "Handpicked · Not to Miss",
+    searchPlaceholder: "Search…",
+    pillAll: "All", pillFood: "Eats", pillBar: "Bars", pillGem: "Hidden Gems",
+    spAll: "All", spJapanese: "Japanese", spChinese: "Chinese", spThai: "Thai",
+    spKorean: "Korean", spItalian: "Italian", spFrench: "French",
+    spAmerican: "American", spModern: "Modern", spDessert: "Desserts",
+    catAll: "All Spots", catFood: "Eats", catBar: "Bars", catGem: "Hidden Gems",
+    cuiAll: "All Eats", cuiJapanese: "Japanese", cuiChinese: "Chinese",
+    cuiThai: "Thai", cuiKorean: "Korean", cuiItalian: "Italian",
+    cuiFrench: "French", cuiAmerican: "American", cuiModern: "Modern",
+    cuiDessert: "Desserts & Cafés",
+    eyAll: "NYC Guide", eyFood: "Restaurants", eyBar: "Bars", eyGem: "Hidden Gems",
+    eyCuiJapanese: "Japanese", eyCuiChinese: "Chinese", eyCuiThai: "Thai",
+    eyCuiKorean: "Korean", eyCuiItalian: "Italian", eyCuiFrench: "French",
+    eyCuiAmerican: "American", eyCuiModern: "Modern", eyCuiDessert: "Desserts",
+    spots: " spots", noRes: "No results found",
+    viewMaps: "View on Maps",
+    footNote: "NYC Guide · Handpicked · 2025", footTop: "↑ Back to Top",
+    toggleBtn: "中文",
+  },
+  zh: {
+    heroTag:    "纽约权威指南 · 2025",
+    heroDesc:   "精选纽约吃喝玩乐清单 — 餐厅、酒吧、隐藏宝石，全都在这里。",
+    statR: "餐厅", statB: "酒吧", statG: "隐藏宝石",
+    heroCta: "开始探索", heroScroll: "下滑",
+    featTitle: "编辑精选", featSub: "手工精选 · 不可错过",
+    searchPlaceholder: "搜索…",
+    pillAll: "全部", pillFood: "美食", pillBar: "酒吧", pillGem: "隐藏宝石",
+    spAll: "全部", spJapanese: "日本", spChinese: "中餐", spThai: "泰国",
+    spKorean: "韩国", spItalian: "意大利", spFrench: "法国",
+    spAmerican: "美国", spModern: "现代", spDessert: "甜品",
+    catAll: "全部地点", catFood: "美食精选", catBar: "酒吧精选", catGem: "隐藏宝石",
+    cuiAll: "全部美食", cuiJapanese: "日本料理", cuiChinese: "中餐精选",
+    cuiThai: "泰国料理", cuiKorean: "韩国料理", cuiItalian: "意大利",
+    cuiFrench: "法国料理", cuiAmerican: "美国料理", cuiModern: "现代料理",
+    cuiDessert: "甜品与咖啡",
+    eyAll: "纽约吃喝玩乐", eyFood: "美食精选", eyBar: "酒吧精选", eyGem: "隐藏宝石",
+    eyCuiJapanese: "日本料理", eyCuiChinese: "中餐精选", eyCuiThai: "泰国料理",
+    eyCuiKorean: "韩国料理", eyCuiItalian: "意大利", eyCuiFrench: "法国料理",
+    eyCuiAmerican: "美国料理", eyCuiModern: "现代料理", eyCuiDessert: "甜品与咖啡",
+    spots: " 个地点", noRes: "没有找到匹配的地点",
+    viewMaps: "查看地图",
+    footNote: "纽约吃喝玩乐 · 手工精选 · 2025", footTop: "↑ 返回顶部",
+    toggleBtn: "English",
+  }
+};
+
+let lang = 'en';
+function T(key) { return TRANSLATIONS[lang][key] || TRANSLATIONS.en[key]; }
+
+function applyLang() {
+  const t = TRANSLATIONS[lang];
+  // Static elements
+  document.getElementById('heroTag').textContent    = t.heroTag;
+  document.getElementById('heroDesc').textContent   = t.heroDesc;
+  document.getElementById('heroCta').textContent    = t.heroCta;
+  document.getElementById('heroScroll').textContent = t.heroScroll;
+  document.getElementById('statR').textContent      = t.statR;
+  document.getElementById('statB').textContent      = t.statB;
+  document.getElementById('statG').textContent      = t.statG;
+  document.getElementById('featTitle').textContent  = t.featTitle;
+  document.getElementById('featSub').textContent    = t.featSub;
+  document.getElementById('footNote').textContent   = t.footNote;
+  document.getElementById('footTop').textContent    = t.footTop;
+  document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+  document.getElementById('langToggle').textContent  = t.toggleBtn;
+  document.getElementById('langToggle').classList.toggle('zh', lang === 'zh');
+  // Keyed spans (pills + sub-pills)
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const k = el.dataset.key;
+    if (t[k]) el.textContent = t[k];
+  });
+  // Re-render to update dynamic text
+  render();
+}
+
+const CAT_T  = { all:'catAll', food:'catFood', bar:'catBar', gem:'catGem' };
+const CUI_T  = { all:'cuiAll', japanese:'cuiJapanese', chinese:'cuiChinese', thai:'cuiThai', korean:'cuiKorean', italian:'cuiItalian', french:'cuiFrench', american:'cuiAmerican', modern:'cuiModern', dessert:'cuiDessert' };
+const EY_MAP = { all:'eyAll', food:'eyFood', bar:'eyBar', gem:'eyGem' };
+const EY_CUI = { japanese:'eyCuiJapanese', chinese:'eyCuiChinese', thai:'eyCuiThai', korean:'eyCuiKorean', italian:'eyCuiItalian', french:'eyCuiFrench', american:'eyCuiAmerican', modern:'eyCuiModern', dessert:'eyCuiDessert' };
 
 function mkCard(p, delay) {
   const a = document.createElement('a');
@@ -755,7 +858,7 @@ function mkCard(p, delay) {
       <span class="c-hood">${p.hood}</span>
     </div>
     <div class="c-foot">
-      <span class="c-maps">View on Maps</span>
+      <span class="c-maps">${T('viewMaps')}</span>
       <span class="c-arr">↗</span>
     </div>`;
   return a;
@@ -778,11 +881,12 @@ function render() {
       noRes.classList.remove('show');
       filtered.forEach((p, i) => grid.appendChild(mkCard(p, i * 18)));
     }
-    const t  = activeCui !== 'all' ? CUI_T[activeCui] : CAT_T[activeCat];
-    const ey = activeCui !== 'all' ? EY_CUI[activeCui] : EY_MAP[activeCat];
-    secTitle.textContent   = t;
-    secEyebrow.textContent = ey;
-    secMeta.textContent    = filtered.length + ' spots';
+    const tKey  = activeCui !== 'all' ? CUI_T[activeCui]  : CAT_T[activeCat];
+    const eyKey = activeCui !== 'all' ? EY_CUI[activeCui] : EY_MAP[activeCat];
+    secTitle.textContent   = T(tKey);
+    secEyebrow.textContent = T(eyKey);
+    secMeta.textContent    = filtered.length + T('spots');
+    noRes.textContent      = T('noRes');
     subNav.classList.toggle('hidden', !(activeCat === 'food' || activeCat === 'all'));
     gridWrap.classList.remove('fading');
   }, 200);
@@ -826,6 +930,11 @@ document.getElementById('searchInput').addEventListener('input', e => {
 
 document.querySelector('.f-top').addEventListener('click', e => {
   e.preventDefault(); window.scrollTo({ top:0, behavior:'smooth' });
+});
+
+document.getElementById('langToggle').addEventListener('click', () => {
+  lang = lang === 'en' ? 'zh' : 'en';
+  applyLang();
 });
 
 render();
